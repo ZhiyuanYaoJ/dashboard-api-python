@@ -16,6 +16,7 @@ from meraki.api.sensor import Sensor
 from meraki.api.sm import Sm
 from meraki.api.switch import Switch
 from meraki.api.wireless import Wireless
+from meraki.api.assurance import Assurance
 # Config import
 from meraki.config import (
     API_KEY_ENVIRONMENT_VARIABLE,
@@ -43,7 +44,7 @@ from meraki.config import (
 )
 from meraki.rest_session import *
 
-__version__ = '1.43.0'
+__version__ = '1.43.1'
 
 
 class DashboardAPI(object):
@@ -181,6 +182,7 @@ class DashboardAPI(object):
         self.sm = Sm(self._session)
         self.switch = Switch(self._session)
         self.wireless = Wireless(self._session)
+        self.assurance = Assurance(self._session)
 
         # Batch definitions
         self.batch = Batch()

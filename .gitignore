@@ -4,3 +4,7 @@
 venv/
 __pycache__
 /.pytest_cache/
+.env
+# no log files
+*.log
+meraki.egg-info/
