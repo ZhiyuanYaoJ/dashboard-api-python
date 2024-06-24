@@ -14,6 +14,7 @@ from meraki.aio.api.sensor import AsyncSensor
 from meraki.aio.api.sm import AsyncSm
 from meraki.aio.api.switch import AsyncSwitch
 from meraki.aio.api.wireless import AsyncWireless
+from meraki.aio.api.assurance import AsyncAssurance
 from meraki.aio.rest_session import *
 # Batch class imports
 from meraki.api.batch import Batch
@@ -181,6 +182,7 @@ class AsyncDashboardAPI:
         self.switch = AsyncSwitch(self._session)
         self.sm = AsyncSm(self._session)
         self.wireless = AsyncWireless(self._session)
+        self.assurance = AsyncAssurance(self._session)
 
         # Batch definitions
         self.batch = Batch()
