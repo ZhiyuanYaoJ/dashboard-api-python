@@ -209,6 +209,7 @@ class Assurance(object):
         - timespan (integer): The timespan for the data. Must be a multiple of 600 and at most 1 day.
         - t0 (string): The beginning of the timespan for the data. The maximum lookback period is 1 week from today.
         - t1 (string): The end of the timespan for the data. t1 can be a maximum of 1 week after t0.
+        - macs (array): The list of client MAC addresses to include
         """
         
         kwargs.update(locals())
@@ -220,10 +221,10 @@ class Assurance(object):
         organizationId = urllib.parse.quote(str(organizationId), safe='')
         resource = f'/organizations/{organizationId}/wireless/clients/connections/dhcp/byClient'
 
-        query_params = ['networkIds', 'timespan', 't0', 't1', ]
+        query_params = ['networkIds', 'timespan', 't0', 't1', 'macs']
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        array_params = ['networkIds', ]
+        array_params = ['networkIds', 'macs']
         for k, _ in kwargs.items():
             if k.strip() in array_params:
                 params[f'{k.strip()}[]'] = kwargs[f'{k}']
