@@ -59,6 +59,7 @@ class RestSession(object):
         self,
         logger,
         api_key,
+        cookie=None,
         base_url=DEFAULT_BASE_URL,
         single_request_timeout=SINGLE_REQUEST_TIMEOUT,
         certificate_path=CERTIFICATE_PATH,
@@ -111,10 +112,15 @@ class RestSession(object):
 
         # Update the headers for the session
         self._req_session.headers = {
-            'Authorization': 'Bearer ' + self._api_key,
             'Content-Type': 'application/json',
             'User-Agent': f'python-meraki/{self._version} ' + user_agent_extended(self._be_geo_id, self._caller),
         }
+        
+        # authentication using either cookie or api key (prioritize cookie if both are provided)
+        if cookie:
+            self._req_session.headers['Cookie'] = "dash_auth=" + cookie
+        else:
+            self._req_session.headers['Authorization'] = 'Bearer ' + self._api_key
 
         # Log API calls
         self._logger = logger

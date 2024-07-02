@@ -77,6 +77,7 @@ class DashboardAPI(object):
 
     def __init__(self,
                  api_key=None,
+                 cookie=None,
                  base_url=DEFAULT_BASE_URL,
                  single_request_timeout=SINGLE_REQUEST_TIMEOUT,
                  certificate_path=CERTIFICATE_PATH,
@@ -151,6 +152,7 @@ class DashboardAPI(object):
         self._session = RestSession(
             logger=self._logger,
             api_key=api_key,
+            cookie=cookie,
             base_url=base_url,
             single_request_timeout=single_request_timeout,
             certificate_path=certificate_path,

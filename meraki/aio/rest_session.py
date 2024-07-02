@@ -21,6 +21,7 @@ class AsyncRestSession:
         self,
         logger,
         api_key,
+        cookie=None,
         base_url=DEFAULT_BASE_URL,
         single_request_timeout=SINGLE_REQUEST_TIMEOUT,
         certificate_path=CERTIFICATE_PATH,
@@ -73,12 +74,18 @@ class AsyncRestSession:
             self._base_url = self._base_url[:-1]
 
         # Update the headers for the session
-        self._headers = {
-            "Authorization": "Bearer " + self._api_key,
+        self._req_session.headers = {
             "Content-Type": "application/json",
             "User-Agent": f"python-meraki/aio-{self._version} "
                           + user_agent_extended(self._be_geo_id, self._caller),
         }
+        
+        # authentication using either cookie or api key (prioritize cookie if both are provided)
+        if cookie:
+            self._req_session.headers['Cookie'] = "dash_auth=" + cookie
+        else:
+            self._req_session.headers['Authorization'] = 'Bearer ' + self._api_key
+
         if self._certificate_path:
             self._sslcontext = ssl.create_default_context()
             self._sslcontext.load_verify_locations(certificate_path)
