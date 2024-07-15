@@ -3690,3 +3690,30 @@ class AsyncOrganizations:
 
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
+
+    def getOrganizationPcapLog(self, organizationId: str, **kwargs):
+        """
+        **Return the paginated list of pcap_log entries from the Postgres database**
+
+        - organizationId (string): Organization ID
+        - captureIds: Return the packet captures of the specified capture ids
+        - networkIds: Return the packet captures of the specified network(s)
+        - deviceIds: Return the packet captures of the specified device(s)
+        - captureSource: Return the packet captures of the specified capture type
+        - captureStatus: Return the packet captures of the specified capture status
+        - outputType: Return the packet captures of the specified output type
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'pcap', 'logs'],
+            'operation': 'getOrganizationPcapLog'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures'
+
+        query_params = ["captureIds", "networkIds", "deviceIds", "captureSource", "captureStatus", "outputType", ]
+        params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
+
+        return self._session.get_pages(metadata, resource, params)
