@@ -3691,7 +3691,7 @@ class Organizations(object):
         return self._session.get_pages(metadata, resource, params, total_pages, direction)
         
 
-    def getOrganizationPcapLog(self, organizationId: str, **kwargs):
+    def getOrganizationPcapLog(self, organizationId: str, captureSource: list, **kwargs):
         """
         **Return the paginated list of pcap_log entries from the Postgres database**
 
@@ -3699,7 +3699,7 @@ class Organizations(object):
         - captureIds: Return the packet captures of the specified capture ids
         - networkIds: Return the packet captures of the specified network(s)
         - deviceIds: Return the packet captures of the specified device(s)
-        - captureSource: Return the packet captures of the specified capture type
+        - captureSource (array): Return the packet captures of the specified capture type
         - captureStatus: Return the packet captures of the specified capture status
         - outputType: Return the packet captures of the specified output type
         """
@@ -3716,4 +3716,23 @@ class Organizations(object):
         query_params = ["captureIds", "networkIds", "deviceIds", "captureSource", "captureStatus", "outputType", ]
         params = {k.strip(): v for k, v in kwargs.items() if k.strip() in query_params}
 
-        return self._session.get_pages(metadata, resource, params)
+        return self._session.get(metadata, resource, params)
+    
+    def getOrganizationPcapDownloadUrl(self, organizationId: str, captureId: int, **kwargs):
+        """
+        **Return the url to download the PCAP file**
+
+        - organizationId (string): Organization ID
+        - captureIds: Return the packet captures of the specified capture ids
+        """
+
+        kwargs.update(locals())
+
+        metadata = {
+            'tags': ['organizations', 'monitor', 'pcap', 'logs'],
+            'operation': 'getOrganizationPcapDownloadUrl'
+        }
+        organizationId = urllib.parse.quote(str(organizationId), safe='')
+        resource = f'/organizations/{organizationId}/devices/packetCapture/captures/{captureId}/downloadUrl'
+
+        return self._session.get(metadata, resource)
